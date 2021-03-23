@@ -19,6 +19,8 @@ di:
 
 services:
 	- App\Router\RouterFactory::createRouter
+	- App\Model\ArticleManager
+	- App\Model\ProductsManager
 
 
 security:
