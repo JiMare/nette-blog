@@ -5,25 +5,28 @@ declare(strict_types=1);
 namespace App\Presenters;
 
 use Nette;
-
+use App\Model\ArticleManager;
+use App\Model\ProductsManager;
 
 final class HomepagePresenter extends Nette\Application\UI\Presenter
 {
-    private Nette\Database\Explorer $database;
+	private ArticleManager $articleManager;
+    private ProductsManager $productsManager;
 
-	public function __construct(Nette\Database\Explorer $database)
+	public function __construct(ArticleManager $articleManager, ProductsManager $productsManager)
 	{
-		$this->database = $database;
+		$this->articleManager = $articleManager;
+		$this->productsManager = $productsManager;
 	}
 
     public function renderDefault(): void
     {
-	$this->template->posts = $this->database->table('posts')
-		->order('created_at DESC')
+	$this->template->posts = $this->articleManager
+	    ->getPublicArticles()
 		->limit(5);
-	$this->template->products = $this->database->table('products');
-		
-    }
 
-	
+	$this->template->products = $this->productsManager
+		->getPublicProducts()
+		->limit(5);	
+    }
 }
